@@ -1,0 +1,890 @@
+{
+	"info": {
+		"_postman_id": "58ab3094-7e29-4b57-bc62-85cab97b28ed",
+		"name": "ILEM Attendance Management System",
+		"description": "Postman collection for testing the ILEM Attendance Management System API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "51427884",
+		"_collection_link": "https://restless-shuttle-24711.postman.co/workspace/5fad33ea-3bbe-496c-83e4-52f2735355e4/collection/29391945-58ab3094-7e29-4b57-bc62-85cab97b28ed?action=share&source=collection_link&creator=51427884"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Employee Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Token set successfully\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pawank24@ilemjapan.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Log in with employee email and password to receive a JWT token containing the employee's role."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Token (Login)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Token set successfully\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"apiKey\": \"EXPRO_ATTENDANCE_2025\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/generate-token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"generate-token"
+							]
+						},
+						"description": "Generates a JWT token for authentication. The token is automatically saved to the 'jwt_token' environment variable for subsequent requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{jwt_token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/verify-token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"verify-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "Get All Employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees/search?query=Tushar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "Tushar",
+									"description": "Search term for name or ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "ILEM1001",
+									"description": "Employee Database ID or Profile ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1005\",\n    \"emp_first_name\": \"Pawan\",\n    \"emp_middle_name\": \"\",\n    \"emp_last_name\": \"Kasture\",\n    \"emp_dob\": \"1996-01-09\",\n    \"emp_contact_number\": \"7055626210\",\n    \"emp_email_id\": \"pawank24@ilemjapan.com\",\n    \"emp_designation\": \"Marketing Head\",\n    \"emp_join_date\": \"2024-07-18\",\n    \"emp_password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/employees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Employee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_designation\": \"Senior Developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/employees/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Birthday List On Month",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees/birthdays?month=2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								"birthdays"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Birthday On Current Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employees/birthdays/today",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employees",
+								"birthdays",
+								"today"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attendance",
+			"item": [
+				{
+					"name": "Add Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1005\",\n    \"login_date\": \"2026-01-08\",\n    \"login_time\": \"09:03:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/attendance/add-login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"add-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Logoff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1005\",\n    \"logoff_date\": \"2026-01-08\",\n    \"logoff_time\": \"18:30:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/attendance/add-logoff",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"add-logoff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Absent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1004\",\n    \"absent_date\": \"2026-01-08\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/attendance/mark-absent",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"mark-absent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Today's Attendance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/attendance/today",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"today"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attendance By Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/attendance/by-date?date=2026-01-08",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"by-date"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2026-01-08"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attendance Date Range (Single Employee)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/attendance/date-range?start_date=2026-01-08&end_date=2026-01-09&emp_profile_id=ILEM1004",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"date-range"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-08"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-01-09"
+								},
+								{
+									"key": "emp_profile_id",
+									"value": "ILEM1004"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Attendance Date Range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/attendance/all-date-range?start_date=2026-01-08&end_date=2026-01-09",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"all-date-range"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-08"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-01-09"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Breaks",
+			"item": [
+				{
+					"name": "Record Tea Break 1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1001\",\n    \"emp_login_date\": \"2026-01-09\",\n    \"start_time\": \"11:03:00\",\n    \"end_time\": \"11:19:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/breaks/tea-break-1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"tea-break-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Record Lunch Break",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1001\",\n    \"emp_login_date\": \"2026-01-09\",\n    \"start_time\": \"13:05:00\",\n    \"end_time\": \"13:40:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/breaks/lunch-break",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"lunch-break"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Record Tea Break 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1005\",\n    \"emp_login_date\": \"2026-01-08\",\n    \"start_time\": \"16:00:00\",\n    \"end_time\": \"16:18:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/breaks/tea-break-2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"tea-break-2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All Breaks Absent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emp_profile_id\": \"ILEM1004\",\n    \"absent_date\": \"2026-01-08\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/breaks/mark-all-absent",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"mark-all-absent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Breaks (Date Range)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/breaks/all?start_date=2026-01-08&end_date=2026-01-09",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"all"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-08"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-01-09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee Breaks (Date Range)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/breaks/employee?start_date=2026-01-08&end_date=2026-01-09&emp_profile_id=ILEM1001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"breaks",
+								"employee"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2026-01-08"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-01-09"
+								},
+								{
+									"key": "emp_profile_id",
+									"value": "ILEM1001"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Holidays",
+			"item": [
+				{
+					"name": "Add Holiday",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"holiday_date\": \"2025-12-25\",\n  \"holiday_name\": \"Christmas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/holidays",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Holiday",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"holiday_date\": \"2025-01-14\",\r\n  \"holiday_name\": \"Utrayan (Makar Sankranti)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/holidays/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Holiday",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/holidays/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Holidays List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/holidays",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Holidays By Year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/holidays/year?year=2026",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays",
+								"year"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2026"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all holidays for a specific year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/holidays/month?year=2026&month=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"holidays",
+								"month"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2026"
+								},
+								{
+									"key": "month",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
